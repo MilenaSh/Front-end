@@ -11,20 +11,18 @@ function solve() {
                 '{{#each headers}} <th>{{this}}</th> {{/each}}'+
            '</tr>' +
           '</thead>' +
-          '<tbody>'+
-                '{{#each items}}'+
-                  '<tr>'+
-                    '<td>{{@index}}</td>'+
-                    '<td>{{this.col1}}</td>'+
-                    '<td>{{this.col2}}</td>'+
-                    '<td>{{this.col3}}</td>'+                    
-                  '</tr>'+
-                '{{/each}}'+
-
-          '</tbody>'+
+            '<tbody>'+
+                  '{{#each items}}'+
+                    '<tr>'+
+                      '<td>{{@index}}</td>'+
+                      '<td>{{this.col1}}</td>'+
+                      '<td>{{this.col2}}</td>'+
+                      '<td>{{this.col3}}</td>'+                    
+                    '</tr>'+
+                  '{{/each}}'+
+            '</tbody>'+
       '</table>'
       ;
-
     $(selector).html(template);
   };
 };
