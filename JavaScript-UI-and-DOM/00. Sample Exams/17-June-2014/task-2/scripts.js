@@ -6,7 +6,7 @@ $.fn.gallery = function (columnsPerRow) {
     columnsPerRow = columnsPerRow || 4;
 
 //selecting elements from the css
-    var $this = this;
+    var $this = this; // vzema tekushtiq element varhu kojto se izpalnqva plugina
     var $selected = $this.children('.selected');
     var $imageContainers = $this.find('image-container');
 

@@ -92,7 +92,7 @@ listOfItems.addEventListener('mouseout', function(ev){
 }, false);
 
 
-
+//added class to the image
   var li = document.createElement('li');
   li.classList.add('image-container');
 
