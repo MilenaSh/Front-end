@@ -1,0 +1,26 @@
+.popup{
+    visibility: hidden;
+    color: white;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 20px;
+    width: 250px;
+    height: 80px;
+    text-align: center;
+    position: center;
+    margin-left: 40%;
+    background-color: #6B9D30;
+    padding-top: 30px;
+    
+}
+
+.popup .show{
+    visibility: visible;
+}
+
+
+#btn{
+    position: center;
+    margin-left: 45%;
+    margin-bottom: 5%;
+}
