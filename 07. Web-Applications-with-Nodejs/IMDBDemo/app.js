@@ -25,59 +25,58 @@ const constants = require("./config/constants");
 
 //require the connetion string - not necessary as a const
 
-require(".config/mongoose")(constants.connectionString)
+require("./config/mongoose")(constants.connectionString)
 
 //using queue data structure
 let urlsQueue = queuesFactory.getQueue();
 
+function wait(time) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, time);
+    });
+}
+
 constants.genres.forEach(genre => {
     for (let i = 0; i < constants.pagesCount; i += 1) {
-
         let url = `http://www.imdb.com/search/title?genres=${genre}&title_type=feature&sort=moviemeter,asc&view=simple&page=${i+1}&ref_=adv_nxt`;
         urlsQueue.push(url);
     }
 });
 
-const fs = require("fs");
-let writableStream = fs.createWriteStream("./output.js", "utf8");
-
+// const fs = require("fs");
+// let writableStream = fs.createWriteStream("./output.js", "utf8");
 function getMoviesFromUrl(url) {
+    console.log(`Working with ${url}`);
     httpRequester.get(url)
         .then((result) => {
             const selector = ".col-title span[title] a";
             const html = result.body;
-            return htmlParser.parseSimpleMovies(selector, html);
-
+            return htmlParser.parseSimpleMovie(selector, html);
         })
         .then(movies => {
-            //writing in output.js
-            // writableStream.write(JSON.stringify(movies));
-            // writableStream.write(os.EOL);
-
-            //export movies to mongoose
-
             let dbMovies = movies.map(movie => {
-                return modelsFactory.getSimpleMovie(movie.name, movie.url);
+                return modelsFactory.getSimpleMovie(movie.title, movie.url);
             });
+
             modelsFactory.insertManySimpleMovies(dbMovies);
+
+            return wait(1000);
         })
-    console.log(movies.length);
-    console.log(url);
-    //start again
-    if (urlsQueue.isEmpty()) {
-        writableStream.end();
-        return;
-    }
-    setTimeout(() => {
-        getMoviesFromUrl(urlsQueue.pop());
-    }, 500);
-})
-.catch((err) => {
-    console.dir(err, { colors: true });
-});
-};
+        .then(() => {
+            if (urlsQueue.isEmpty()) {
+                return;
+            }
 
-getMoviesFromUrl(urlsQueue.pop());
+            getMoviesFromUrl(urlsQueue.pop());
+        })
+        .catch((err) => {
+            console.dir(err, { colors: true });
+        });
+}
 
-//to parse it we use jquery - we tale the html and place it as an inner html of the body
-//we need jsdom package for node
+const asyncPagesCount = 15;
+
+Array.from({ length: asyncPagesCount })
+    .forEach(() => getMoviesFromUrl(urlsQueue.pop()));

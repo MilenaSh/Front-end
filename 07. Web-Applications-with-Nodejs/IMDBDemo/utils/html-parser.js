@@ -9,7 +9,7 @@ const { JSDOM } = jsdom;
 const { window } = new JSDOM(`<!DOCTYPE html>`);
 const $ = require('jQuery')(window);
 
-module.exports.parseSimpleMovies = (selector, html) => {
+module.exports.parseSimpleMovie = (selector, html) => {
 
     return Promise.resolve()
         .then(() => {
