@@ -28,6 +28,7 @@ SimpleMovieSchema.statics.getSimpleMovieByNameAndUrl =
         return new SimpleMovie({ name, imdbId });
     };
 
+//virtual property  
 SimpleMovieSchema.virtual.imdbUrl = function() {
     return `http://imdb.com/title/${this.imdbId}/?ref_=adv_li_tt`;
 };
